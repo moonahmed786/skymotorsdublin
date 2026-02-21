@@ -272,10 +272,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileUnique(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('create unique index %s on %s (%s)',
+        return sprintf('create unique index %s on %s (%s)%s',
             $this->wrap($command->index),
             $this->wrapTable($blueprint),
-            $this->columnize($command->columns)
+            $this->columnize($command->columns),
+            $command->online ? ' with (online = on)' : ''
         );
     }
 
@@ -288,10 +289,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileIndex(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('create index %s on %s (%s)',
+        return sprintf('create index %s on %s (%s)%s',
             $this->wrap($command->index),
             $this->wrapTable($blueprint),
-            $this->columnize($command->columns)
+            $this->columnize($command->columns),
+            $command->online ? ' with (online = on)' : ''
         );
     }
 
@@ -684,11 +686,7 @@ class SqlServerGrammar extends Grammar
      */
     protected function typeFloat(Fluent $column)
     {
-        if ($column->precision) {
-            return "float({$column->precision})";
-        }
-
-        return 'float';
+        return ! is_null($column->precision) ? "float($column->precision)" : 'float';
     }
 
     /**
@@ -769,6 +767,10 @@ class SqlServerGrammar extends Grammar
      */
     protected function typeDate(Fluent $column)
     {
+        if ($column->useCurrent) {
+            $column->default(new Expression('CAST(GETDATE() AS DATE)'));
+        }
+
         return 'date';
     }
 
@@ -802,7 +804,7 @@ class SqlServerGrammar extends Grammar
      */
     protected function typeTime(Fluent $column)
     {
-        return $column->precision ? "time($column->precision)" : 'time';
+        return ! is_null($column->precision) ? "time($column->precision)" : 'time';
     }
 
     /**
@@ -828,7 +830,7 @@ class SqlServerGrammar extends Grammar
             $column->default(new Expression('CURRENT_TIMESTAMP'));
         }
 
-        return $column->precision ? "datetime2($column->precision)" : 'datetime';
+        return ! is_null($column->precision) ? "datetime2($column->precision)" : 'datetime';
     }
 
     /**
@@ -845,7 +847,7 @@ class SqlServerGrammar extends Grammar
             $column->default(new Expression('CURRENT_TIMESTAMP'));
         }
 
-        return $column->precision ? "datetimeoffset($column->precision)" : 'datetimeoffset';
+        return ! is_null($column->precision) ? "datetimeoffset($column->precision)" : 'datetimeoffset';
     }
 
     /**
@@ -856,6 +858,10 @@ class SqlServerGrammar extends Grammar
      */
     protected function typeYear(Fluent $column)
     {
+        if ($column->useCurrent) {
+            $column->default(new Expression('CAST(YEAR(GETDATE()) AS INTEGER)'));
+        }
+
         return $this->typeInteger($column);
     }
 

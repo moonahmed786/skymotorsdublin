@@ -12,20 +12,24 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@skymotorsdublin.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
+        $admin = \App\Models\User::firstOrCreate(
+            ['email' => 'admin@skymotorsdublin.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('admin123'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $admin->assignRole('Super Admin');
 
-        \App\Models\User::create([
-            'name' => 'Sales Rep',
-            'email' => 'sales@skymotorsdublin.com',
-            'password' => bcrypt('sales123'),
-            'role' => 'sales_rep',
-            'email_verified_at' => now(),
-        ]);
+        $sales = \App\Models\User::firstOrCreate(
+            ['email' => 'sales@skymotorsdublin.com'],
+            [
+                'name' => 'Sales Rep',
+                'password' => bcrypt('sales123'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $sales->assignRole('Sales Rep');
     }
 }
