@@ -32,21 +32,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Temporary Deployment Helper (Remove after use)
-Route::get('/deploy-app', function () {
-    try {
-        echo "Running migrations...<br>";
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        echo \Illuminate\Support\Facades\Artisan::output() . "<br>";
-
-        echo "Clearing cache...<br>";
-        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-        echo \Illuminate\Support\Facades\Artisan::output() . "<br>";
-
-        return "Deployment tasks completed successfully!";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});
-
 require __DIR__ . '/auth.php';
