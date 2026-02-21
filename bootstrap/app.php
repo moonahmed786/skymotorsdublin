@@ -20,5 +20,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
     })->create();
 
 $app->usePublicPath(base_path());
+$app->useStoragePath(base_path('storage_app'));
 
 return $app;
