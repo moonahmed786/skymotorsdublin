@@ -23,8 +23,7 @@ Route::get('/deploy-app', function () {
                     $output = "Cache Cleared:\n" . Artisan::output();
                     break;
                 case 'link':
-                    Artisan::call('storage:link');
-                    $output = "Storage Linked:\n" . Artisan::output();
+                    $output = "Storage Link: Handled automatically via .htaccess rewrite rule. No symlink needed.";
                     break;
             }
         } catch (\Exception $e) {
