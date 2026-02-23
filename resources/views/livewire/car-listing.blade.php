@@ -106,7 +106,7 @@
                             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition duration-200 overflow-hidden flex flex-col h-full border border-gray-100 dark:border-gray-700">
                                 <div class="aspect-[16/10] bg-gray-200 dark:bg-gray-700 relative overflow-hidden group">
                                     @if($car->images->count() > 0)
-                                        <img src="{{ Storage::url($car->images->first()->image_path) }}" 
+                                        <img src="{{ Storage::disk('public')->url($car->images->first()->image_path) }}" 
                                              alt="{{ $car->brand->name ?? $car->make->name ?? '' }} {{ $car->type->name ?? $car->model->name ?? '' }}" 
                                              class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
                                     @else
@@ -121,7 +121,7 @@
                                     </div>
                                     @if($car->brand && $car->brand->logo_path)
                                         <div class="absolute bottom-2 left-2 bg-white/80 p-1 rounded-full">
-                                            <img src="{{ Storage::url($car->brand->logo_path) }}" class="h-6 w-6 object-contain">
+                                            <img src="{{ Storage::disk('public')->url($car->brand->logo_path) }}" class="h-6 w-6 object-contain">
                                         </div>
                                     @endif
                                 </div>

@@ -99,7 +99,7 @@
                                             @endphp
                                             @if($displayImage)
                                                 <img class="h-12 w-20 rounded object-cover shadow-sm border border-slate-100"
-                                                    src="{{ Storage::url($displayImage->image_path) }}" alt="">
+                                                    src="{{ Storage::disk('public')->url($displayImage->image_path) }}" alt="">
                                             @else
                                                 <div
                                                     class="h-12 w-20 rounded bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300">

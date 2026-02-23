@@ -3,6 +3,7 @@
 !/uploads/cars/.gitkeep
 !/uploads/brands/.gitkeep
 !/uploads/car-types/.gitkeep
+!/uploads/livewire-tmp/.gitkeep
 /vendor/
 /node_modules/
 /public/build/

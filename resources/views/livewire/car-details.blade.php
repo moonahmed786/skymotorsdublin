@@ -4,24 +4,26 @@
             <div class="grid grid-cols-1 lg:grid-cols-2">
                 <!-- Image Gallery -->
                 <div class="p-6 bg-gray-100 dark:bg-gray-700">
-                    <div class="mb-4 aspect-[4/3] rounded-lg overflow-hidden relative group">
-                        @if($car->images->count() > 0)
-                            <img src="{{ Storage::url($car->images->first()->image_path) }}"
-                                class="w-full h-full object-cover" id="mainImage">
-                        @else
-                            <div class="flex items-center justify-center h-full bg-gray-300 dark:bg-gray-600 text-gray-400">
-                                <span class="text-lg">No Image Available</span>
-                            </div>
-                        @endif
-                    </div>
+                    @if($car->images->count() > 0)
+                        <div class="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden ring-1 ring-black/5 shadow-2xl">
+                            <img src="{{ Storage::disk('public')->url($car->images->where('is_primary', true)->first()->image_path ?? $car->images->first()->image_path) }}"
+                                class="w-full h-full object-cover main-image" id="mainImage">
+                        </div>
+                    @else
+                        <div class="flex items-center justify-center h-full bg-gray-300 dark:bg-gray-600 text-gray-400">
+                            <span class="text-lg">No Image Available</span>
+                        </div>
+                    @endif
 
                     @if($car->images->count() > 1)
-                        <div class="grid grid-cols-4 gap-2">
+                        <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mt-6">
                             @foreach($car->images as $image)
-                                <div class="cursor-pointer rounded-md overflow-hidden aspect-square border-2 border-transparent hover:border-blue-500 transition"
-                                    onclick="document.getElementById('mainImage').src = '{{ Storage::url($image->image_path) }}'">
-                                    <img src="{{ Storage::url($image->image_path) }}" class="w-full h-full object-cover">
-                                </div>
+                                <button
+                                    onclick="document.getElementById('mainImage').src='{{ Storage::disk('public')->url($image->image_path) }}'"
+                                    class="aspect-w-1 aspect-h-1 rounded-xl overflow-hidden ring-2 ring-transparent hover:ring-blue-500 transition-all focus:outline-none bg-gray-100">
+                                    <img src="{{ Storage::disk('public')->url($image->image_path) }}"
+                                        class="w-full h-full object-cover">
+                                </button>
                             @endforeach
                         </div>
                     @endif
@@ -42,7 +44,8 @@
                             {{ $car->brand->name ?? $car->make->name }} {{ $car->type->name ?? $car->model->name }}
                         </h1>
                         <p class="text-lg text-gray-600 dark:text-gray-300">{{ $car->year_of_manufacture }} •
-                            {{ number_format($car->mileage) }} km</p>
+                            {{ number_format($car->mileage) }} km
+                        </p>
                     </div>
 
                     <div class="flex items-center justify-between mb-8 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -69,17 +72,20 @@
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Fuel Type</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ ucfirst($car->fuel_type) }}</dd>
+                                {{ ucfirst($car->fuel_type) }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Transmission</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ ucfirst($car->transmission) }}</dd>
+                                {{ ucfirst($car->transmission) }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Body Type</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->body_type ?? 'N/A' }}</dd>
+                                {{ $car->body_type ?? 'N/A' }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Color</dt>
@@ -89,7 +95,8 @@
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">NCT Expiry</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->nct_expiry_date ? $car->nct_expiry_date->format('d M Y') : 'N/A' }}</dd>
+                                {{ $car->nct_expiry_date ? $car->nct_expiry_date->format('d M Y') : 'N/A' }}
+                            </dd>
                         </div>
                     </div>
 

@@ -173,7 +173,7 @@
                                         @foreach ($existingImages as $image)
                                             <div
                                                 class="relative group aspect-square rounded-md overflow-hidden border dark:border-gray-700 shadow-sm">
-                                                <img src="{{ Storage::url($image['image_path']) }}"
+                                                <img src="{{ Storage::disk('public')->url($image['image_path']) }}"
                                                     class="w-full h-full object-cover">
                                                 <button type="button" wire:click="deleteImage({{ $image['id'] }})"
                                                     wire:confirm="Are you sure you want to delete this image?"

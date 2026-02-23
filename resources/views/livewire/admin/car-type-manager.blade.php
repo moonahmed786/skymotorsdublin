@@ -231,7 +231,7 @@
                                 @elseif ($existingImage)
                                     <div class="mt-3">
                                         <p class="text-xs text-slate-500 mb-1 font-medium">Current Image:</p>
-                                        <img src="{{ Storage::url($existingImage) }}"
+                                        <img src="{{ Storage::disk('public')->url($existingImage) }}"
                                             class="h-16 w-16 object-contain border border-slate-200 rounded-lg p-1 bg-slate-50">
                                     </div>
                                 @endif
