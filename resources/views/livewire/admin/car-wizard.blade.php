@@ -241,14 +241,15 @@
                                         <label class="block text-sm font-semibold text-slate-700 mb-3">Main Banner Image</label>
                                         <div class="relative group">
                                             <label
-                                                class="flex flex-col items-center justify-center w-full h-56 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-white hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 overflow-hidden ring-4 ring-transparent hover:ring-blue-50">
+                                                class="flex flex-col items-center justify-center w-full h-56 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-blue-50/30 hover:bg-white hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 overflow-hidden ring-4 ring-transparent hover:ring-blue-50">
                                                 @if ($mainImage)
                                                     <img src="{{ $mainImage->temporaryUrl() }}" class="w-full h-full object-cover">
-                                                    <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                                        <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 text-white text-sm font-bold tracking-wide">
+                                                    <div class="absolute inset-0 bg-blue-600/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                                        <div class="bg-blue-600/80 backdrop-blur-md px-4 py-2 rounded-full border border-blue-400 text-white text-sm font-bold tracking-wide">
                                                             Change Banner
                                                         </div>
                                                     </div>
+                                                    <div class="absolute bottom-0 left-0 right-0 bg-blue-600/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest py-1.5 text-center shadow-lg">BANNER</div>
                                                 @else
                                                     <div class="flex flex-col items-center justify-center pt-5 pb-6 text-slate-400">
                                                         <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -333,7 +334,7 @@
                                                 @foreach($existingImages as $img)
                                                     <div class="relative group aspect-square rounded-xl overflow-hidden bg-slate-100 border border-slate-200 transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/50 hover:-translate-y-1">
                                                         <img src="{{ Storage::url($img['image_path']) }}" class="w-full h-full object-cover grayscale-[0.2] transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110">
-                                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                        <div class="absolute inset-0 bg-blue-600/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                                         
                                                         <button type="button" 
                                                             wire:click="deleteImage({{ $img['id'] }})"
@@ -342,7 +343,7 @@
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                         </button>
                                                         @if($img['is_primary'])
-                                                            <div class="absolute bottom-2 left-2 bg-blue-600/90 backdrop-blur text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-sm">BANNER</div>
+                                                            <div class="absolute bottom-0 left-0 right-0 bg-blue-600/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest py-1.5 text-center shadow-lg">BANNER</div>
                                                         @endif
                                                     </div>
                                                 @endforeach
