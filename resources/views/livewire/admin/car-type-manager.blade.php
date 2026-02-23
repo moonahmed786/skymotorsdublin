@@ -79,7 +79,7 @@
                                     class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     Status</th>
                                 <th
-                                    class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     Actions</th>
                             </tr>
                         </thead>
@@ -112,11 +112,58 @@
                                             {{ $carType->is_active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button wire:click="edit({{ $carType->id }})"
-                                            class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition-colors">Edit</button>
-                                        <button wire:click="delete({{ $carType->id }})" wire:confirm="Are you sure?"
-                                            class="text-rose-600 hover:text-rose-800 font-semibold transition-colors">Delete</button>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                        <div x-data="{ open: false }" class="relative inline-block text-left">
+                                            <button @click="open = !open" @click.away="open = false"
+                                                class="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 shadow-sm border border-slate-200/60">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                        d="M12 5v.01M12 12v.01M12 19v.01"></path>
+                                                </svg>
+                                            </button>
+
+                                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                                x-transition:leave="transition ease-in duration-75"
+                                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                                x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                                                class="absolute right-0 mt-3 w-48 rounded-2xl bg-white shadow-2xl shadow-slate-900/10 border border-slate-100 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden"
+                                                style="display: none;">
+                                                <div class="py-1">
+                                                    <button wire:click="edit({{ $carType->id }}); open = false;"
+                                                        class="group w-full flex items-center px-4 py-3 text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                        <div
+                                                            class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                                </path>
+                                                            </svg>
+                                                        </div>
+                                                        Edit Type
+                                                    </button>
+                                                    <button wire:click="delete({{ $carType->id }})"
+                                                        wire:confirm="Are you sure you want to delete this car type?"
+                                                        @click="open = false;"
+                                                        class="group w-full flex items-center px-4 py-3 text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors">
+                                                        <div
+                                                            class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center mr-3 group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                </path>
+                                                            </svg>
+                                                        </div>
+                                                        Delete Type
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

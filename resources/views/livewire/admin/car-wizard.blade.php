@@ -235,50 +235,88 @@
                             </div>
 
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                <!-- Main Image -->
-                                <div class="lg:col-span-1">
-                                    <label class="block text-sm font-medium text-slate-700 mb-2">Main Image (Thumbnail)</label>
-                                    <div class="relative group">
+                                <!-- Upload Control -->
+                                <div class="lg:col-span-1 space-y-6">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-slate-700 mb-3">Main Banner Image</label>
+                                        <div class="relative group">
+                                            <label
+                                                class="flex flex-col items-center justify-center w-full h-56 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-white hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 overflow-hidden ring-4 ring-transparent hover:ring-blue-50">
+                                                @if ($mainImage)
+                                                    <img src="{{ $mainImage->temporaryUrl() }}" class="w-full h-full object-cover">
+                                                    <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                                        <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 text-white text-sm font-bold tracking-wide">
+                                                            Change Banner
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-slate-400">
+                                                        <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                        </div>
+                                                        <p class="mb-1 text-sm font-bold text-slate-700">Drop main image</p>
+                                                        <p class="text-xs text-slate-400">Click to browse files</p>
+                                                    </div>
+                                                @endif
+                                                <input type="file" wire:model="mainImage" class="hidden" accept="image/*" />
+                                            </label>
+                                        </div>
+                                        @error('mainImage') <span class="text-rose-500 text-xs mt-2 block font-medium">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div>
+                                        @php
+                                            $galleryCount = count($pendingImages) + count($existingImages);
+                                        @endphp
+                                        <label class="block text-sm font-semibold text-slate-700 mb-3 flex justify-between items-center">
+                                            <span>Bulk Gallery Upload</span>
+                                            <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-500">{{ $galleryCount }}/4 Images</span>
+                                        </label>
                                         <label
-                                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 hover:border-blue-400 transition-all duration-200 overflow-hidden">
-                                            @if ($mainImage)
-                                                <img src="{{ $mainImage->temporaryUrl() }}" class="w-full h-full object-cover">
-                                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <span class="text-white font-medium">Change Image</span>
+                                            @class([
+                                                'flex flex-col items-center justify-center w-full h-32 border-2 border-slate-200 border-dashed rounded-2xl transition-all duration-300 ring-4 ring-transparent',
+                                                'cursor-pointer bg-slate-50/50 hover:bg-white hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/5 hover:ring-blue-50' => $galleryCount < 4,
+                                                'cursor-not-allowed bg-slate-100 border-slate-300 opacity-60' => $galleryCount >= 4,
+                                            ])>
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6 text-slate-400">
+                                                <div @class([
+                                                    'w-10 h-10 rounded-full flex items-center justify-center mb-2',
+                                                    'bg-slate-100 text-slate-500' => $galleryCount < 4,
+                                                    'bg-slate-200 text-slate-300' => $galleryCount >= 4,
+                                                ])>
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                                 </div>
-                                            @else
-                                                <div class="flex flex-col items-center justify-center pt-5 pb-6 text-slate-400">
-                                                    <svg class="w-10 h-10 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                    <p class="mb-2 text-sm"><span class="font-semibold text-blue-600">Click to upload</span></p>
-                                                    <p class="text-xs">SVG, PNG, JPG or GIF</p>
-                                                </div>
+                                                <p class="text-sm font-bold {{ $galleryCount < 4 ? 'text-slate-600' : 'text-slate-400' }}">
+                                                    {{ $galleryCount < 4 ? 'Add Gallery Images' : 'Gallery Full' }}
+                                                </p>
+                                            </div>
+                                            @if($galleryCount < 4)
+                                                <input type="file" wire:model="images" multiple class="hidden" accept="image/*" />
                                             @endif
-                                            <input type="file" wire:model="mainImage" class="hidden" accept="image/*" />
                                         </label>
                                     </div>
-                                    @error('mainImage') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
 
-                                <!-- Gallery Images -->
-                                <div class="lg:col-span-2">
-                                    <label class="block text-sm font-medium text-slate-700 mb-2">Add New Gallery Images</label>
-                                    <label
-                                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 hover:border-blue-400 transition-all duration-200 mb-4">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6 text-slate-400">
-                                            <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                                            <p class="text-sm"><span class="font-semibold text-blue-600">Add more images</span> to the gallery</p>
-                                        </div>
-                                        <input type="file" wire:model="images" multiple class="hidden" accept="image/*" />
-                                    </label>
-
-                                    @if ($images)
-                                        <div class="mb-6">
-                                            <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Pending Uploads</h4>
-                                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-4">
-                                                @foreach($images as $img)
-                                                    <div class="relative group aspect-square rounded-lg overflow-hidden border border-blue-200 shadow-sm ring-2 ring-blue-100">
+                                <!-- Preview Grid -->
+                                <div class="lg:col-span-2 space-y-8">
+                                    @if ($pendingImages)
+                                        <div class="animate-fade-in-up">
+                                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                                Pending Uploads ({{ count($pendingImages) }} images)
+                                            </h4>
+                                            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                                                @foreach($pendingImages as $index => $img)
+                                                    <div class="relative group aspect-square rounded-xl overflow-hidden border-2 border-blue-100 shadow-md ring-4 ring-blue-50 transition-all duration-300 hover:scale-105">
                                                         <img src="{{ $img->temporaryUrl() }}" class="w-full h-full object-cover">
-                                                        <div class="absolute inset-0 bg-blue-600/10"></div>
+                                                        
+                                                        <button type="button" 
+                                                            wire:click="removePendingImage({{ $index }})"
+                                                            class="absolute -top-1 -right-1 bg-rose-500 text-white p-1 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-rose-600">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                        </button>
+
+                                                        <div class="absolute inset-x-0 bottom-0 bg-blue-600/90 text-[10px] text-white py-1 text-center font-bold tracking-wider">NEW</div>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -287,23 +325,37 @@
 
                                     @if ($existingImages)
                                         <div>
-                                            <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Existing Images</h4>
-                                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                                Current Gallery ({{ count($existingImages) }} images)
+                                            </h4>
+                                            <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
                                                 @foreach($existingImages as $img)
-                                                    <div class="relative group aspect-square rounded-lg overflow-hidden border border-slate-200 shadow-sm">
-                                                        <img src="{{ Storage::url($img['image_path']) }}" class="w-full h-full object-cover">
+                                                    <div class="relative group aspect-square rounded-xl overflow-hidden bg-slate-100 border border-slate-200 transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/50 hover:-translate-y-1">
+                                                        <img src="{{ Storage::url($img['image_path']) }}" class="w-full h-full object-cover grayscale-[0.2] transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110">
+                                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                        
                                                         <button type="button" 
                                                             wire:click="deleteImage({{ $img['id'] }})"
                                                             wire:confirm="Are you sure you want to delete this image?"
-                                                            class="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-md">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                            class="absolute top-2 right-2 bg-rose-500/90 backdrop-blur-md text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-rose-600 shadow-lg transform translate-y-2 group-hover:translate-y-0">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                         </button>
                                                         @if($img['is_primary'])
-                                                            <div class="absolute bottom-0 inset-x-0 bg-blue-600 text-[10px] text-white py-0.5 text-center font-bold uppercase tracking-tighter">Main</div>
+                                                            <div class="absolute bottom-2 left-2 bg-blue-600/90 backdrop-blur text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-sm">BANNER</div>
                                                         @endif
                                                     </div>
                                                 @endforeach
                                             </div>
+                                        </div>
+                                    @endif
+
+                                    @if (!$images && !$existingImages)
+                                        <div class="flex flex-col items-center justify-center h-64 bg-slate-50/50 border-2 border-slate-100 border-dashed rounded-3xl">
+                                            <div class="p-4 bg-white rounded-2xl shadow-sm mb-4">
+                                                <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            </div>
+                                            <p class="text-slate-400 font-medium">No images uploaded yet</p>
                                         </div>
                                     @endif
                                 </div>

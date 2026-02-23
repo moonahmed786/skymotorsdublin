@@ -36,6 +36,7 @@ class Car extends Model
         'vat_on_customs_amount',
         'selling_price',
         'sold_price',
+        'sold_at',
         'mileage',
         'nct_status',
         'nct_expiry_date',
@@ -66,6 +67,7 @@ class Car extends Model
         'collection_date' => 'date',
         'nct_expiry_date' => 'date',
         'date_vrt_paid' => 'date',
+        'sold_at' => 'datetime',
         'features' => 'array',
         'is_published' => 'boolean',
     ];

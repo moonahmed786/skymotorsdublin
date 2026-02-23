@@ -76,7 +76,7 @@
                                         @csrf
 
                                         <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                                    this.closest('form').submit();">
+                                                                        this.closest('form').submit();">
                                             {{ __('Log Out') }}
                                         </x-dropdown-link>
                                     </form>
@@ -88,7 +88,7 @@
                                     class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition">Log
                                     in</a>
                                 <a href="{{ route('register') }}"
-                                    class="inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-full font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-500 focus:bg-primary-500 active:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">Register</a>
+                                    class="hidden items-center px-4 py-2 bg-primary-600 border border-transparent rounded-full font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-500 focus:bg-primary-500 active:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">Register</a>
                             </div>
                         @endauth
                     </div>
@@ -140,7 +140,7 @@
                                 @csrf
 
                                 <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
-                                                            this.closest('form').submit();">
+                                                                this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-responsive-nav-link>
                             </form>
@@ -150,7 +150,7 @@
                             <x-responsive-nav-link :href="route('login')">
                                 {{ __('Log in') }}
                             </x-responsive-nav-link>
-                            <x-responsive-nav-link :href="route('register')">
+                            <x-responsive-nav-link :href="route('register')" class="hidden">
                                 {{ __('Register') }}
                             </x-responsive-nav-link>
                         </div>

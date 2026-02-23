@@ -7,7 +7,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <h2 class="text-xl font-bold text-slate-800 tracking-tight">Car Management</h2>
                     <div class="flex items-center gap-2">
-                         <button wire:click="downloadSample" wire:loading.attr="disabled"
+                        <button wire:click="downloadSample" wire:loading.attr="disabled"
                             class="inline-flex items-center px-3 py-2 bg-slate-100 border border-slate-300 rounded-lg font-semibold text-xs text-slate-700 uppercase tracking-widest hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition ease-in-out duration-150">
                             Sample
                         </button>
@@ -17,8 +17,10 @@
                             <span wire:loading wire:target="export">Exporting...</span>
                         </button>
 
-                        <div class="relative" x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
-                            x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-error="uploading = false"
+                        <div class="relative" x-data="{ uploading: false, progress: 0 }"
+                            x-on:livewire-upload-start="uploading = true"
+                            x-on:livewire-upload-finish="uploading = false"
+                            x-on:livewire-upload-error="uploading = false"
                             x-on:livewire-upload-progress="progress = $event.detail.progress">
                             <input type="file" wire:model="excelFile" class="hidden" id="excel-upload"
                                 accept=".xlsx,.xls,.csv" wire:change="import">
@@ -68,7 +70,8 @@
                     <table class="min-w-full divide-y divide-slate-200/60">
                         <thead class="bg-slate-50/80 backdrop-blur-sm">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                                     Image
                                 </th>
                                 <x-table-sort-header label="Reg / Chassis" field="registration_number"
@@ -82,7 +85,7 @@
                                 <x-table-sort-header label="Status" field="status" :sortField="$sortField"
                                     :sortDirection="$sortDirection" />
                                 <th scope="col"
-                                    class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     Actions</th>
                             </tr>
                         </thead>
@@ -91,12 +94,18 @@
                                 <tr class="hover:bg-blue-50/30 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="h-12 w-20 flex-shrink-0">
-                                            @if($car->mainImage)
-                                                <img class="h-12 w-20 rounded object-cover" src="{{ Storage::url($car->mainImage->image_path) }}" alt="">
+                                            @php
+                                                $displayImage = $car->mainImage ?? $car->images->first();
+                                            @endphp
+                                            @if($displayImage)
+                                                <img class="h-12 w-20 rounded object-cover shadow-sm border border-slate-100"
+                                                    src="{{ Storage::url($displayImage->image_path) }}" alt="">
                                             @else
-                                                <div class="h-12 w-20 rounded bg-slate-200 flex items-center justify-center text-slate-400">
+                                                <div
+                                                    class="h-12 w-20 rounded bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300">
                                                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                     </svg>
                                                 </div>
                                             @endif
@@ -110,49 +119,101 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-slate-900">
-                                            {{ $car->brand->name ?? $car->make->name ?? 'N/A' }}</div>
+                                            {{ $car->brand->name ?? $car->make->name ?? 'N/A' }}
+                                        </div>
                                         <div class="text-sm text-slate-500">
-                                            {{ $car->type->name ?? $car->model->name ?? 'N/A' }}</div>
+                                            {{ $car->type->name ?? $car->model->name ?? 'N/A' }}
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div
                                             class="text-sm text-slate-700 font-medium bg-slate-100 px-2 py-0.5 rounded inline-block">
-                                            {{ $car->year_of_manufacture }}</div>
+                                            {{ $car->year_of_manufacture }}
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-bold text-slate-900">
                                             €{{ number_format($car->selling_price, 2) }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="px-2.5 py-0.5 inline-flex text-xs font-bold rounded-full 
-                                                    {{ $car->status === 'available' ? 'bg-emerald-100 text-emerald-700' : '' }}
-                                                    {{ $car->status === 'sold' ? 'bg-slate-100 text-slate-600' : '' }}
-                                                    {{ $car->status === 'reserved' ? 'bg-amber-100 text-amber-700' : '' }}
-                                                    {{ $car->status === 'in_service' ? 'bg-blue-100 text-blue-700' : '' }}">
-                                            {{ ucfirst(str_replace('_', ' ', $car->status)) }}
-                                        </span>
+                                        @php
+                                            $statusConfig = [
+                                                'available' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                                'sold' => 'bg-slate-900 text-white border-slate-800',
+                                                'reserved' => 'bg-amber-50 text-amber-600 border-amber-100',
+                                                'in_service' => 'bg-blue-50 text-blue-600 border-blue-100'
+                                            ];
+                                            $currentStatusClasses = $statusConfig[$car->status] ?? 'bg-slate-50 text-slate-600 border-slate-100';
+                                        @endphp
+                                        <div class="relative group/status">
+                                            <select wire:change="updateStatus({{ $car->id }}, $event.target.value)"
+                                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                                <option value="available" {{ $car->status === 'available' ? 'selected' : '' }}>Available</option>
+                                                <option value="sold" {{ $car->status === 'sold' ? 'selected' : '' }}>Sold</option>
+                                                <option value="reserved" {{ $car->status === 'reserved' ? 'selected' : '' }}>Reserved</option>
+                                                <option value="in_service" {{ $car->status === 'in_service' ? 'selected' : '' }}>In Service</option>
+                                            </select>
+                                            <span @class([
+                                                'inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm transition-all duration-300 group-hover/status:scale-105',
+                                                $currentStatusClasses
+                                            ])>
+                                                <span class="w-1.5 h-1.5 rounded-full mr-2 {{ $car->status === 'sold' ? 'bg-white' : 'bg-current shadow-[0_0_8px_currentColor]' }}"></span>
+                                                {{ str_replace('_', ' ', $car->status) }}
+                                            </span>
+                                        </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{ route('admin.cars.edit', $car->id) }}"
-                                            class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition-colors">Edit</a>
-                                        <button 
-                                            @click="
-                                                Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: 'You won\'t be able to revert this!',
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#d33',
-                                                    cancelButtonColor: '#3085d6',
-                                                    confirmButtonText: 'Yes, delete it!'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        $wire.delete({{ $car->id }})
-                                                    }
-                                                })
-                                            "
-                                            class="text-rose-600 hover:text-rose-800 font-semibold transition-colors">Delete</button>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                        <div x-data="{ open: false }" class="relative inline-block text-left">
+                                            <button @click="open = !open" @click.away="open = false" 
+                                                class="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 shadow-sm border border-slate-200/60">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 5v.01M12 12v.01M12 19v.01"></path></svg>
+                                            </button>
+                                            
+                                            <div x-show="open" 
+                                                x-transition:enter="transition ease-out duration-200"
+                                                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                                x-transition:leave="transition ease-in duration-75"
+                                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                                x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                                                class="absolute right-0 mt-3 w-48 rounded-2xl bg-white shadow-2xl shadow-slate-900/10 border border-slate-100 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden"
+                                                style="display: none;">
+                                                <div class="py-1">
+                                                    <a href="{{ route('admin.cars.edit', $car->id) }}" class="group flex items-center px-4 py-3 text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mr-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                        </div>
+                                                        Edit Car
+                                                    </a>
+                                                    <button @click="
+                                                            open = false;
+                                                            Swal.fire({
+                                                                title: 'Are you sure?',
+                                                                text: 'Deleted cars cannot be recovered!',
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#ef4444',
+                                                                cancelButtonColor: '#64748b',
+                                                                confirmButtonText: 'Yes, delete it!',
+                                                                customClass: {
+                                                                    popup: 'rounded-[1.5rem]',
+                                                                    confirmButton: 'rounded-xl font-bold px-6',
+                                                                    cancelButton: 'rounded-xl font-bold px-6'
+                                                                }
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    $wire.delete({{ $car->id }})
+                                                                }
+                                                            })
+                                                        " class="group w-full flex items-center px-4 py-3 text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors">
+                                                        <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center mr-3 group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                        </div>
+                                                        Delete Car
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

@@ -42,6 +42,23 @@ class CarManager extends Component
         $this->resetPage();
     }
 
+    public function updateStatus($id, $status)
+    {
+        $car = Car::findOrFail($id);
+        $oldStatus = $car->status;
+
+        $data = ['status' => $status];
+
+        if ($status === 'sold' && $oldStatus !== 'sold') {
+            $data['sold_at'] = now();
+        } elseif ($status !== 'sold') {
+            $data['sold_at'] = null;
+        }
+
+        $car->update($data);
+        session()->flash('message', 'Car status updated to ' . str_replace('_', ' ', $status) . '.');
+    }
+
     public function delete($id)
     {
         Car::find($id)->delete();

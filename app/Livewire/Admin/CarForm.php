@@ -138,12 +138,12 @@ class CarForm extends Component
         if ($this->photos) {
             foreach ($this->photos as $photo) {
                 // Store file and get path
-                $path = $photo->store('car-images', 'public');
+                $path = $photo->store('cars/' . $car->id, 'public');
 
                 // Create CarImage record
                 $car->images()->create([
                     'image_path' => $path,
-                    'is_main' => false, // Simplification for now
+                    'is_primary' => false,
                 ]);
             }
         }

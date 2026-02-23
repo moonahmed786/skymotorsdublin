@@ -42,7 +42,8 @@ class CarWizard extends Component
     public $isPublished = false;
 
     // Step 4: Images
-    public $images = [];
+    public $images = []; // Temporary storage for newly selected images
+    public $pendingImages = []; // Persistent list of images to be saved
     public $mainImage;
     public $existingImages = [];
 
@@ -142,6 +143,30 @@ class CarWizard extends Component
         }
     }
 
+    public function updatedImages()
+    {
+        $this->validate([
+            'images.*' => 'image|max:2048',
+        ]);
+
+        $count = count($this->pendingImages) + count($this->existingImages);
+
+        foreach ($this->images as $image) {
+            if ($count < 4) {
+                $this->pendingImages[] = $image;
+                $count++;
+            }
+        }
+
+        $this->images = []; // Clear the temporary input
+    }
+
+    public function removePendingImage($index)
+    {
+        unset($this->pendingImages[$index]);
+        $this->pendingImages = array_values($this->pendingImages);
+    }
+
     public function updatedBrandId()
     {
         if ($this->brandId) {
@@ -213,13 +238,14 @@ class CarWizard extends Component
             $car->images()->create(['image_path' => $path, 'is_primary' => true]);
         }
 
-        foreach ($this->images as $image) {
+        foreach ($this->pendingImages as $image) {
             $path = $image->store('cars/' . $car->id, 'public');
             $car->images()->create(['image_path' => $path, 'is_primary' => false]);
         }
 
         $this->mainImage = null;
         $this->images = [];
+        $this->pendingImages = [];
         $this->loadExistingImages();
 
         session()->flash('message', $this->isEditMode ? 'Car updated successfully!' : 'Car created successfully!');
