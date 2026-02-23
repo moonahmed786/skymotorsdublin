@@ -53,7 +53,7 @@ class CarTypeManager extends Component
         return [
             'name' => 'required|string|max:255',
             'brandId' => 'required|exists:brands,id',
-            'image' => $this->isEditing ? 'nullable|image|max:1024' : 'required|image|max:1024',
+            'image' => $this->isEditing ? 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024' : 'required|image|mimes:jpeg,png,jpg,webp|max:1024',
             'isActive' => 'boolean',
         ];
     }

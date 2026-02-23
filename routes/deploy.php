@@ -20,7 +20,10 @@ Route::get('/deploy-app', function () {
                     break;
                 case 'clear':
                     Artisan::call('optimize:clear');
-                    $output = "Cache Cleared:\n" . Artisan::output();
+                    Artisan::call('view:clear');
+                    Artisan::call('route:clear');
+                    Artisan::call('config:clear');
+                    $output = "Comprehensive Cache Cleared:\n" . Artisan::output();
                     break;
                 case 'link':
                     $output = "Storage Link: Handled automatically via .htaccess rewrite rule. No symlink needed.";

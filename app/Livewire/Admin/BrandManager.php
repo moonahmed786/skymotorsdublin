@@ -50,7 +50,7 @@ class BrandManager extends Component
     {
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('brands')->ignore($this->brandId)],
-            'logo' => $this->isEditing ? 'nullable|image|max:1024' : 'required|image|max:1024',
+            'logo' => $this->isEditing ? 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024' : 'required|image|mimes:jpeg,png,jpg,webp|max:1024',
             'isActive' => 'boolean',
         ];
     }

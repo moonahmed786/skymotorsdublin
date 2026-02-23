@@ -169,7 +169,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Image</label>
                                 <div class="mt-1 flex items-center">
-                                    <input type="file" wire:model="image"
+                                    <input type="file" wire:model="image" accept="image/*"
                                         class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors">
                                 </div>
                                 @error('image') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span>
