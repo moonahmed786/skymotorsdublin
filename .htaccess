@@ -19,6 +19,7 @@
     RewriteRule ^ %1 [L,R=301]
 
     # Serve storage files from storage/app/public
+    RewriteCond %{REQUEST_URI} !^/storage/app/public/
     RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
 
     # Send Requests To Front Controller...
