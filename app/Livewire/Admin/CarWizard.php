@@ -44,6 +44,7 @@ class CarWizard extends Component
     // Step 4: Images
     public $images = [];
     public $mainImage;
+    public $existingImages = [];
 
     // Data Sources
     public $brands;
@@ -118,6 +119,26 @@ class CarWizard extends Component
             $this->description = $car->description;
             $this->features = $car->features ?? [];
             $this->isPublished = $car->is_published;
+            $this->loadExistingImages();
+        }
+    }
+
+    public function loadExistingImages()
+    {
+        if ($this->car) {
+            $this->existingImages = $this->car->images()->orderBy('is_primary', 'desc')->get()->toArray();
+        }
+    }
+
+    public function deleteImage($imageId)
+    {
+        $image = \App\Models\CarImage::find($imageId);
+        if ($image) {
+            Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+            $this->loadExistingImages();
+            $this->dispatch('image-deleted');
+            session()->flash('message', 'Image deleted successfully.');
         }
     }
 
@@ -185,9 +206,6 @@ class CarWizard extends Component
         $car->save();
 
         if ($this->mainImage) {
-            // If replacing main image, maybe delete old one? 
-            // For now just add new one as main.
-            // Ideally unset previous main image.
             if ($this->isEditMode) {
                 $car->images()->where('is_primary', true)->update(['is_primary' => false]);
             }
@@ -199,6 +217,10 @@ class CarWizard extends Component
             $path = $image->store('cars/' . $car->id, 'public');
             $car->images()->create(['image_path' => $path, 'is_primary' => false]);
         }
+
+        $this->mainImage = null;
+        $this->images = [];
+        $this->loadExistingImages();
 
         session()->flash('message', $this->isEditMode ? 'Car updated successfully!' : 'Car created successfully!');
         return redirect()->route('admin.cars.index');

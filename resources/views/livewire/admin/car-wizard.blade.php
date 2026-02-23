@@ -261,7 +261,7 @@
 
                                 <!-- Gallery Images -->
                                 <div class="lg:col-span-2">
-                                    <label class="block text-sm font-medium text-slate-700 mb-2">Gallery Images</label>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Add New Gallery Images</label>
                                     <label
                                         class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 hover:border-blue-400 transition-all duration-200 mb-4">
                                         <div class="flex flex-col items-center justify-center pt-5 pb-6 text-slate-400">
@@ -272,12 +272,38 @@
                                     </label>
 
                                     @if ($images)
-                                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-4">
-                                            @foreach($images as $img)
-                                                <div class="relative group aspect-square rounded-lg overflow-hidden border border-slate-200 shadow-sm">
-                                                    <img src="{{ $img->temporaryUrl() }}" class="w-full h-full object-cover">
-                                                </div>
-                                            @endforeach
+                                        <div class="mb-6">
+                                            <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Pending Uploads</h4>
+                                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                                                @foreach($images as $img)
+                                                    <div class="relative group aspect-square rounded-lg overflow-hidden border border-blue-200 shadow-sm ring-2 ring-blue-100">
+                                                        <img src="{{ $img->temporaryUrl() }}" class="w-full h-full object-cover">
+                                                        <div class="absolute inset-0 bg-blue-600/10"></div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($existingImages)
+                                        <div>
+                                            <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Existing Images</h4>
+                                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                                                @foreach($existingImages as $img)
+                                                    <div class="relative group aspect-square rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                                                        <img src="{{ Storage::url($img['image_path']) }}" class="w-full h-full object-cover">
+                                                        <button type="button" 
+                                                            wire:click="deleteImage({{ $img['id'] }})"
+                                                            wire:confirm="Are you sure you want to delete this image?"
+                                                            class="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-md">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                        </button>
+                                                        @if($img['is_primary'])
+                                                            <div class="absolute bottom-0 inset-x-0 bg-blue-600 text-[10px] text-white py-0.5 text-center font-bold uppercase tracking-tighter">Main</div>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     @endif
                                 </div>

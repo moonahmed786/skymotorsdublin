@@ -50,6 +50,7 @@ class CarForm extends Component
     public $back_camera_status = 'working';
 
     public $photos = [];
+    public $existingImages = [];
 
     public function mount($car = null)
     {
@@ -58,6 +59,25 @@ class CarForm extends Component
             $this->fill($car->toArray());
             $this->brand_id = $car->brand_id;
             $this->car_type_id = $car->car_type_id;
+            $this->loadExistingImages();
+        }
+    }
+
+    public function loadExistingImages()
+    {
+        if ($this->car) {
+            $this->existingImages = $this->car->images()->get()->toArray();
+        }
+    }
+
+    public function deleteImage($imageId)
+    {
+        $image = \App\Models\CarImage::find($imageId);
+        if ($image) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+            $this->loadExistingImages();
+            session()->flash('message', 'Image deleted successfully.');
         }
     }
 
@@ -90,8 +110,8 @@ class CarForm extends Component
 
         $data = $this->all();
 
-        // Remove photos from data array as it's handled separately if implemented
-        unset($data['photos'], $data['car']);
+        // Remove photos and state from data array
+        unset($data['photos'], $data['car'], $data['existingImages']);
 
         // Explicitly set brand and type
         $data['brand_id'] = $this->brand_id;
@@ -139,6 +159,7 @@ class CarForm extends Component
                 ->when($this->brand_id, fn($q) => $q->where('brand_id', $this->brand_id))
                 ->orderBy('name')
                 ->get(),
+            'existingImages' => $this->existingImages,
         ])->layout('layouts.admin');
     }
 }

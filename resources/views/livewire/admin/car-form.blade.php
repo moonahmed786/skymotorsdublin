@@ -166,15 +166,28 @@
                                 </div>
                             @endif
 
-                            @if ($car && $car->images->count() > 0)
+                            @if ($existingImages)
                                 <div class="mt-4">
                                     <h4 class="text-sm font-medium mb-2">Existing Photos</h4>
-                                    <div class="grid grid-cols-3 gap-4">
-                                        @foreach ($car->images as $image)
-                                            <div class="relative group">
-                                                <img src="{{ Storage::url($image->image_path) }}"
-                                                    class="w-full h-32 object-cover rounded-md">
-                                                <!-- Add delete button logic later -->
+                                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                        @foreach ($existingImages as $image)
+                                            <div
+                                                class="relative group aspect-square rounded-md overflow-hidden border dark:border-gray-700 shadow-sm">
+                                                <img src="{{ Storage::url($image['image_path']) }}"
+                                                    class="w-full h-full object-cover">
+                                                <button type="button" wire:click="deleteImage({{ $image['id'] }})"
+                                                    wire:confirm="Are you sure you want to delete this image?"
+                                                    class="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-md">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                                @if($image['is_primary'])
+                                                    <div
+                                                        class="absolute bottom-0 inset-x-0 bg-blue-600 text-[10px] text-white py-0.5 text-center font-bold uppercase tracking-tighter">
+                                                        Main</div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
