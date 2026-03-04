@@ -34,7 +34,8 @@
                     <div class="mb-6">
                         <div class="flex items-center gap-2 mb-2">
                             @if($car->brand && $car->brand->logo_path)
-                                <img src="{{ Storage::url($car->brand->logo_path) }}" class="h-8 w-8 object-contain">
+                                <img src="{{ Storage::disk('public')->url($car->brand->logo_path) }}"
+                                    class="h-8 w-8 object-contain">
                             @endif
                             <h2 class="text-sm font-semibold text-blue-600 uppercase tracking-wide">
                                 {{ $car->brand->name ?? $car->make->name ?? 'Unknown Make' }}
@@ -106,22 +107,26 @@
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Radio Status</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->radio_status ?? 'N/A' }}</dd>
+                                {{ $car->radio_status ?? 'N/A' }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Service Status</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->service_status ?? 'N/A' }}</dd>
+                                {{ $car->service_status ?? 'N/A' }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Valet Status</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->valet_status ?? 'N/A' }}</dd>
+                                {{ $car->valet_status ?? 'N/A' }}
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Parking Location</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->parking_location ?? 'N/A' }}</dd>
+                                {{ $car->parking_location ?? 'N/A' }}
+                            </dd>
                         </div>
                         @if($car->collection_date)
                             <div>

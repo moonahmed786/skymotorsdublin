@@ -85,7 +85,8 @@
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($brand->logo_path)
-                                            <img src="{{ Storage::url($brand->logo_path) }}" alt="{{ $brand->name }}"
+                                            <img src="{{ Storage::disk('public')->url($brand->logo_path) }}"
+                                                alt="{{ $brand->name }}"
                                                 class="h-10 w-10 object-contain rounded-full bg-slate-50 border border-slate-200">
                                         @else
                                             <div
