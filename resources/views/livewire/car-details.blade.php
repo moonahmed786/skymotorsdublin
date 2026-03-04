@@ -44,7 +44,9 @@
                             {{ $car->brand->name ?? $car->make->name }} {{ $car->type->name ?? $car->model->name }}
                         </h1>
                         <p class="text-lg text-gray-600 dark:text-gray-300">{{ $car->year_of_manufacture }} •
-                            {{ number_format($car->mileage) }} km
+                            {{ number_format($car->mileage) }} km •
+                            <span
+                                class="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-sm">{{ $car->registration_number }}</span>
                         </p>
                     </div>
 
@@ -93,11 +95,42 @@
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">NCT Expiry</dt>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">NCT Status</dt>
                             <dd class="text-base font-semibold text-gray-900 dark:text-white">
-                                {{ $car->nct_expiry_date ? $car->nct_expiry_date->format('d M Y') : 'N/A' }}
+                                {{ $car->nct_status ?? 'N/A' }}
+                                @if($car->nct_expiry_date)
+                                    <span class="text-xs font-normal">({{ $car->nct_expiry_date->format('d M Y') }})</span>
+                                @endif
                             </dd>
                         </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Radio Status</dt>
+                            <dd class="text-base font-semibold text-gray-900 dark:text-white">
+                                {{ $car->radio_status ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Service Status</dt>
+                            <dd class="text-base font-semibold text-gray-900 dark:text-white">
+                                {{ $car->service_status ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Valet Status</dt>
+                            <dd class="text-base font-semibold text-gray-900 dark:text-white">
+                                {{ $car->valet_status ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Parking Location</dt>
+                            <dd class="text-base font-semibold text-gray-900 dark:text-white">
+                                {{ $car->parking_location ?? 'N/A' }}</dd>
+                        </div>
+                        @if($car->collection_date)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Collection Date</dt>
+                                <dd class="text-base font-semibold text-gray-900 dark:text-white">
+                                    {{ $car->collection_date->format('d M Y') }}
+                                </dd>
+                            </div>
+                        @endif
                     </div>
 
                     @if($car->description)

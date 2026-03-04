@@ -91,7 +91,8 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-slate-200/60">
                             @foreach ($cars as $car)
-                                <tr class="hover:bg-blue-50/30 transition-colors duration-150">
+                                <tr class="hover:bg-blue-50/30 transition-colors duration-150 cursor-pointer"
+                                    x-on:click="window.location.href = '{{ route('cars.show', $car->id) }}'">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="h-12 w-20 flex-shrink-0">
                                             @php
@@ -145,7 +146,7 @@
                                             ];
                                             $currentStatusClasses = $statusConfig[$car->status] ?? 'bg-slate-50 text-slate-600 border-slate-100';
                                         @endphp
-                                        <div class="relative group/status">
+                                        <div class="relative group/status" x-on:click.stop>
                                             <select wire:change="updateStatus({{ $car->id }}, $event.target.value)"
                                                 class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                                                 <option value="available" {{ $car->status === 'available' ? 'selected' : '' }}>Available</option>
@@ -163,7 +164,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                        <div x-data="{ open: false }" class="relative inline-block text-left">
+                                        <div x-data="{ open: false }" class="relative inline-block text-left" x-on:click.stop>
                                             <button @click="open = !open" @click.away="open = false" 
                                                 class="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 shadow-sm border border-slate-200/60">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 5v.01M12 12v.01M12 19v.01"></path></svg>

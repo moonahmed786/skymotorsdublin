@@ -28,10 +28,11 @@
                                 <div class="absolute top-12 w-32 text-center text-xs font-semibold uppercase tracking-wider transition-colors duration-300"
                                      :class="currentStep >= {{ $step }} ? 'text-blue-600' : 'text-slate-400'">
                                     @if($step == 1) Branding @endif
-                                    @if($step == 2) Details @endif
-                                    @if($step == 3) Info @endif
-                                    @if($step == 4) Images @endif
-                                    @if($step == 5) Review @endif
+                                    @if($step == 2) Technical @endif
+                                    @if($step == 3) Status @endif
+                                    @if($step == 4) Details @endif
+                                    @if($step == 5) Images @endif
+                                    @if($step == 6) Review @endif
                                 </div>
                             </div>
                         @endforeach
@@ -154,23 +155,92 @@
                                         class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700" placeholder="e.g. Metallic Black">
                                     @error('color') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Step 3: Status & Logistics -->
+                    @if($currentStep == 3)
+                        <div wire:key="step-3" class="animate-fade-in-up">
+                            <div class="text-center mb-6">
+                                <h3 class="text-xl font-semibold text-slate-800">Status & Logistics</h3>
+                                <p class="text-slate-500 text-sm">Update the current status and location of the vehicle.</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-6 rounded-xl border border-slate-100">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Number of Owners</label>
-                                    <input type="number" wire:model="numberOfOwners"
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">NCT Status</label>
+                                    <select wire:model="nctStatus"
                                         class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                        <option value="">Select Option</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Due">Due</option>
+                                        <option value="Retest">Retest</option>
+                                    </select>
+                                    @error('nctStatus') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700 mb-1">NCT Expiry</label>
                                     <input type="date" wire:model="nctExpiry"
                                         class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                    @error('nctExpiry') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Radio Status</label>
+                                    <select wire:model="radioStatus"
+                                        class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                        <option value="">Select Option</option>
+                                        <option value="Changed">Changed</option>
+                                        <option value="Not Changed">Not Changed</option>
+                                        <option value="No Need to Change">No Need to Change</option>
+                                    </select>
+                                    @error('radioStatus') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Service Status</label>
+                                    <select wire:model="serviceStatus"
+                                        class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                        <option value="">Select Option</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Due">Due</option>
+                                    </select>
+                                    @error('serviceStatus') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Valet Status</label>
+                                    <select wire:model="valetStatus"
+                                        class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                        <option value="">Select Option</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Due">Due</option>
+                                        <option value="Ready to Collect">Ready to Collect</option>
+                                    </select>
+                                    @error('valetStatus') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Parking Location</label>
+                                    <select wire:model="parkingLocation"
+                                        class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                        <option value="">Select Option</option>
+                                        <option value="Old Garage">Old Garage</option>
+                                        <option value="New Garage">New Garage</option>
+                                        <option value="Duffy">Duffy</option>
+                                    </select>
+                                    @error('parkingLocation') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Collection Date</label>
+                                    <input type="date" wire:model="collectionDate"
+                                        class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                    @error('collectionDate') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
                     @endif
 
-                    <!-- Step 3: Info -->
-                    @if($currentStep == 3)
-                        <div wire:key="step-3" class="animate-fade-in-up">
+                    <!-- Step 4: Info -->
+                    @if($currentStep == 4)
+                        <div wire:key="step-4" class="animate-fade-in-up">
                              <div class="text-center mb-6">
                                 <h3 class="text-xl font-semibold text-slate-800">Vehicle Identification & Pricing</h3>
                                 <p class="text-slate-500 text-sm">Set the price and description.</p>
@@ -210,6 +280,45 @@
                                             class="pl-7 w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700" placeholder="0.00">
                                     </div>
                                 </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">VRT Amount (€)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-slate-500 sm:text-sm">€</span>
+                                        </div>
+                                        <input type="number" step="0.01" wire:model="vrtAmount"
+                                            class="pl-7 w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700" placeholder="0.00">
+                                    </div>
+                                    @error('vrtAmount') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Date VRT Paid</label>
+                                    <input type="date" wire:model="dateVrtPaid"
+                                        class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700">
+                                    @error('dateVrtPaid') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Customs Amount (€)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-slate-500 sm:text-sm">€</span>
+                                        </div>
+                                        <input type="number" step="0.01" wire:model="customsAmount"
+                                            class="pl-7 w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700" placeholder="0.00">
+                                    </div>
+                                    @error('customsAmount') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">VAT on Customs (€)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-slate-500 sm:text-sm">€</span>
+                                        </div>
+                                        <input type="number" step="0.01" wire:model="vatOnCustomsAmount"
+                                            class="pl-7 w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-all text-slate-700" placeholder="0.00">
+                                    </div>
+                                    @error('vatOnCustomsAmount') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
                                     <textarea wire:model="description" rows="4"
@@ -226,9 +335,9 @@
                         </div>
                     @endif
 
-                    <!-- Step 4: Images -->
-                    @if($currentStep == 4)
-                        <div wire:key="step-4" class="space-y-8 animate-fade-in-up">
+                    <!-- Step 5: Images -->
+                    @if($currentStep == 5)
+                        <div wire:key="step-5" class="space-y-8 animate-fade-in-up">
                             <div class="text-center mb-6">
                                 <h3 class="text-xl font-semibold text-slate-800">Vehicle Gallery</h3>
                                 <p class="text-slate-500 text-sm">Upload high-quality images of the vehicle.</p>
@@ -364,9 +473,9 @@
                         </div>
                     @endif
 
-                    <!-- Step 5: Review -->
-                    @if($currentStep == 5)
-                        <div wire:key="step-5" class="animate-fade-in-up">
+                    <!-- Step 6: Review -->
+                    @if($currentStep == 6)
+                        <div wire:key="step-6" class="animate-fade-in-up">
                             <div class="text-center mb-6">
                                 <h3 class="text-xl font-semibold text-slate-800">Review & Confirm</h3>
                                 <p class="text-slate-500 text-sm">Please verify all details before submitting.</p>
@@ -394,6 +503,54 @@
                                         <dt class="text-sm font-medium text-slate-500">Selling Price</dt>
                                         <dd class="mt-1 text-sm text-blue-600 sm:col-span-2 sm:mt-0 font-bold text-lg">€{{ number_format((float)$price_selling, 2) }}</dd>
                                     </div>
+                                    <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                        <dt class="text-sm font-medium text-slate-500">NCT Status & Expiry</dt>
+                                        <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0">
+                                            {{ $nctStatus ?? 'N/A' }} {{ $nctExpiry ? '(' . $nctExpiry . ')' : '' }}
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                        <dt class="text-sm font-medium text-slate-500">Radio & Service</dt>
+                                        <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0">
+                                            Radio: {{ $radioStatus ?? 'N/A' }} | Service: {{ $serviceStatus ?? 'N/A' }}
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                        <dt class="text-sm font-medium text-slate-500">Valet & Parking</dt>
+                                        <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0">
+                                            Valet: {{ $valetStatus ?? 'N/A' }} | Parking: {{ $parkingLocation ?? 'N/A' }}
+                                        </dd>
+                                    </div>
+                                    @if($collectionDate)
+                                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                            <dt class="text-sm font-medium text-slate-500">Collection Date</dt>
+                                            <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0">{{ $collectionDate }}</dd>
+                                        </div>
+                                    @endif
+                                    @if($vrtAmount)
+                                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                            <dt class="text-sm font-medium text-slate-500">VRT Amount</dt>
+                                            <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0 font-semibold">€{{ number_format((float)$vrtAmount, 2) }}</dd>
+                                        </div>
+                                    @endif
+                                    @if($dateVrtPaid)
+                                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                            <dt class="text-sm font-medium text-slate-500">Date VRT Paid</dt>
+                                            <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0">{{ $dateVrtPaid }}</dd>
+                                        </div>
+                                    @endif
+                                    @if($customsAmount)
+                                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                            <dt class="text-sm font-medium text-slate-500">Customs Amount</dt>
+                                            <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0 font-semibold">€{{ number_format((float)$customsAmount, 2) }}</dd>
+                                        </div>
+                                    @endif
+                                    @if($vatOnCustomsAmount)
+                                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-slate-100/50 transition-colors">
+                                            <dt class="text-sm font-medium text-slate-500">VAT on Customs</dt>
+                                            <dd class="mt-1 text-sm text-slate-900 sm:col-span-2 sm:mt-0 font-semibold">€{{ number_format((float)$vatOnCustomsAmount, 2) }}</dd>
+                                        </div>
+                                    @endif
                                 </dl>
                             </div>
                         </div>

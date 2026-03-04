@@ -103,7 +103,8 @@
                 @if($cars->count() > 0)
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($cars as $car)
-                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition duration-200 overflow-hidden flex flex-col h-full border border-gray-100 dark:border-gray-700">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition duration-200 overflow-hidden flex flex-col h-full border border-gray-100 dark:border-gray-700 cursor-pointer"
+                                 x-on:click="window.location.href = '{{ route('cars.show', $car->id) }}'">
                                 <div class="aspect-[16/10] bg-gray-200 dark:bg-gray-700 relative overflow-hidden group">
                                     @if($car->images->count() > 0)
                                         <img src="{{ Storage::disk('public')->url($car->images->first()->image_path) }}" 

@@ -15,7 +15,7 @@ class CarWizard extends Component
     use WithFileUploads;
 
     public $currentStep = 1;
-    public $totalSteps = 5;
+    public $totalSteps = 6;
 
     // Step 1: Branding
     public $brandId = '';
@@ -27,10 +27,14 @@ class CarWizard extends Component
     public $fuelType;
     public $transmission;
     public $mileage;
-    public $bodyType;
-    public $numberOfOwners;
-    public $nctExpiry;
     public $color;
+    public $nctExpiry;
+    public $nctStatus;
+    public $radioStatus;
+    public $valetStatus;
+    public $serviceStatus;
+    public $parkingLocation;
+    public $collectionDate;
 
     // Step 3: Information & Features
     public $registrationNumber;
@@ -39,6 +43,10 @@ class CarWizard extends Component
     public $features = []; // specific features selected
     public $price_buying;
     public $price_selling;
+    public $vrtAmount;
+    public $dateVrtPaid;
+    public $customsAmount;
+    public $vatOnCustomsAmount;
     public $isPublished = false;
 
     // Step 4: Images
@@ -66,18 +74,29 @@ class CarWizard extends Component
                 'transmission' => 'required|in:manual,automatic',
                 'mileage' => 'required|integer',
                 'color' => 'required|string',
-                'numberOfOwners' => 'nullable|integer',
-                'nctExpiry' => 'nullable|date',
             ],
             3 => [
+                'nctStatus' => 'nullable|string',
+                'nctExpiry' => 'nullable|date',
+                'radioStatus' => 'nullable|string',
+                'serviceStatus' => 'nullable|string',
+                'valetStatus' => 'nullable|string',
+                'parkingLocation' => 'nullable|string',
+                'collectionDate' => 'nullable|date',
+            ],
+            4 => [
                 'registrationNumber' => 'required|string|unique:cars,registration_number,' . ($this->car->id ?? 'NULL'),
                 'chassisNumber' => 'required|string|unique:cars,chassis_number,' . ($this->car->id ?? 'NULL'),
                 'price_buying' => 'required|numeric',
                 'price_selling' => 'nullable|numeric',
+                'vrtAmount' => 'nullable|numeric',
+                'dateVrtPaid' => 'nullable|date',
+                'customsAmount' => 'nullable|numeric',
+                'vatOnCustomsAmount' => 'nullable|numeric',
                 'description' => 'nullable|string',
                 'isPublished' => 'boolean',
             ],
-            4 => [
+            5 => [
                 'mainImage' => 'nullable|image|max:2048',
                 'images.*' => 'image|max:2048',
             ],
@@ -109,14 +128,23 @@ class CarWizard extends Component
             $this->transmission = $car->transmission;
             $this->mileage = $car->mileage;
             $this->color = $car->color;
-            $this->numberOfOwners = $car->number_of_owners;
             $this->nctExpiry = $car->nct_expiry_date ? $car->nct_expiry_date->format('Y-m-d') : null;
+            $this->nctStatus = $car->nct_status;
+            $this->radioStatus = $car->radio_status;
+            $this->valetStatus = $car->valet_status;
+            $this->serviceStatus = $car->service_status;
+            $this->parkingLocation = $car->parking_location;
+            $this->collectionDate = $car->collection_date ? $car->collection_date->format('Y-m-d') : null;
 
             // Step 3
             $this->registrationNumber = $car->registration_number;
             $this->chassisNumber = $car->chassis_number;
             $this->price_buying = $car->purchasing_price;
             $this->price_selling = $car->selling_price;
+            $this->vrtAmount = $car->vrt_amount;
+            $this->dateVrtPaid = $car->date_vrt_paid ? $car->date_vrt_paid->format('Y-m-d') : null;
+            $this->customsAmount = $car->customs_amount;
+            $this->vatOnCustomsAmount = $car->vat_on_customs_amount;
             $this->description = $car->description;
             $this->features = $car->features ?? [];
             $this->isPublished = $car->is_published;
@@ -216,13 +244,22 @@ class CarWizard extends Component
         $car->transmission = $this->transmission;
         $car->mileage = $this->mileage;
         $car->color = $this->color;
-        $car->number_of_owners = $this->numberOfOwners;
         $car->nct_expiry_date = $this->nctExpiry;
+        $car->nct_status = $this->nctStatus;
+        $car->radio_status = $this->radioStatus;
+        $car->valet_status = $this->valetStatus;
+        $car->service_status = $this->serviceStatus;
+        $car->parking_location = $this->parkingLocation;
+        $car->collection_date = $this->collectionDate;
 
         $car->registration_number = $this->registrationNumber;
         $car->chassis_number = $this->chassisNumber;
         $car->purchasing_price = $this->price_buying;
         $car->selling_price = $this->price_selling;
+        $car->vrt_amount = $this->vrtAmount;
+        $car->date_vrt_paid = $this->dateVrtPaid;
+        $car->customs_amount = $this->customsAmount;
+        $car->vat_on_customs_amount = $this->vatOnCustomsAmount;
         $car->description = $this->description;
         $car->features = $this->features;
         $car->is_published = $this->isPublished;
