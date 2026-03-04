@@ -34,6 +34,16 @@ Route::get('/deploy-app', function () {
         }
     }
 
+    $outputHtml = "";
+    if ($output) {
+        $safeOutput = htmlspecialchars($output);
+        $outputHtml = "
+        <div class='mt-6'>
+            <h2 class='font-semibold text-gray-700 mb-2'>Output:</h2>
+            <pre class='bg-gray-800 text-green-400 p-4 rounded overflow-x-auto text-sm'>{$safeOutput}</pre>
+        </div>";
+    }
+
     return <<<HTML
 <!DOCTYPE html>
 <html>
@@ -47,18 +57,13 @@ Route::get('/deploy-app', function () {
         
         <div class="space-y-4">
             <div class="flex space-x-2">
-                <a href="?action=migrate" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run Migrations</a>
-                <a href="?action=seed" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Run Seeds</a>
-                <a href="?action=link" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Link Storage</a>
-                <a href="?action=clear" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Clear Cache</a>
+                <a href="?action=migrate" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">Run Migrations</a>
+                <a href="?action=seed" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">Run Seeds</a>
+                <a href="?action=link" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 text-sm">Link Storage</a>
+                <a href="?action=clear" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm">Clear Cache</a>
             </div>
 
-            " . ($output ? "
-            <div class='mt-6'>
-                <h2 class='font-semibold text-gray-700 mb-2'>Output:</h2>
-                <pre class='bg-gray-800 text-green-400 p-4 rounded overflow-x-auto text-sm'>{$output}</pre>
-            </div>
-            " : "") . "
+            $outputHtml
         </div>
 
         <div class="mt-8 text-sm text-gray-500 border-t pt-4">
