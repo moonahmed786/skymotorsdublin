@@ -53,16 +53,69 @@
                     </div>
                 @endif
 
-                <!-- Search -->
-                <div class="mb-6 relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                <!-- Search & Filters -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-8 items-center">
+                    <!-- Search (Half Width) -->
+                    <div class="md:col-span-2 relative group">
+                        <div class="absolute inset-y-0 right-0 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors" style="padding-right: 10px;">
+                            <svg class="h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input wire:model.live="search" type="text" placeholder="Search by Reg, Brand, Make, or Model..."
+                            class="w-full pl-4 pr-10 py-2 bg-white border border-slate-200 text-slate-900 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm">
                     </div>
-                    <input wire:model.live="search" type="text" placeholder="Search by Reg, Brand, Model..."
-                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm placeholder:text-slate-400">
+
+                    <!-- Status (Quarter Width) -->
+                    <div class="relative">
+                        <select wire:model.live="filterStatus"
+                            class="w-full pl-3 pr-8 py-2 bg-white border border-slate-200 text-slate-900 text-sm font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                            <option value="">All</option>
+                            <option value="available">Available</option>
+                            <option value="sold">Sold</option>
+                            <option value="reserved">Reserved</option>
+                            <option value="in_service">In Service</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Date (Quarter Width) -->
+                    <div x-data="{ openPicker() { $refs.monthInput.showPicker() } }" class="relative group flex items-center gap-2">
+                        <div class="relative flex-1">
+                            @if(!$filterMonth)
+                                <div @click="openPicker()" class="flex items-center justify-center gap-2 w-full py-2 bg-white border border-slate-200 text-slate-400 text-sm font-bold rounded-xl cursor-pointer hover:border-blue-500 hover:text-blue-500 transition-all shadow-sm">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Select Month</span>
+                                </div>
+                            @else
+                                <div class="w-full pl-10 pr-10 py-2 bg-white border border-slate-200 text-slate-900 text-sm font-bold rounded-xl shadow-sm transition-all flex items-center min-h-[40px]">
+                                    {{ date('F Y', strtotime($filterMonth)) }}
+                                </div>
+                                <!-- Calendar Icon on the right to trigger picker -->
+                                <div class="absolute inset-y-0 right-0 flex items-center cursor-pointer text-slate-400 hover:text-blue-600 transition-colors z-10" style="padding-right: 10px;" @click="openPicker()">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            @endif
+                            
+                            <!-- Hidden Input -->
+                            <input x-ref="monthInput" type="month" wire:model.live="filterMonth"
+                                class="absolute inset-0 opacity-0 pointer-events-none w-full h-full">
+                        </div>
+
+                        @if($search || $filterStatus || $filterMonth)
+                            <button wire:click="clearFilters" 
+                                class="p-2 text-slate-400 hover:text-rose-500 transition-colors"
+                                title="Reset Filters">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Table -->
@@ -100,7 +153,7 @@
                                             @endphp
                                             @if($displayImage)
                                                 <img class="h-12 w-20 rounded object-cover shadow-sm border border-slate-100"
-                                                    src="{{ Storage::disk('public')->url($displayImage->image_path) }}" alt="">
+                                                    src="/uploads/{{ $displayImage->image_path }}" alt="">
                                             @else
                                                 <div
                                                     class="h-12 w-20 rounded bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300">

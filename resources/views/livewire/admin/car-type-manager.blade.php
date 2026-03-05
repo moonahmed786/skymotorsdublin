@@ -88,8 +88,7 @@
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($carType->image_path)
-                                            <img src="{{ Storage::disk('public')->url($carType->image_path) }}"
-                                                alt="{{ $carType->name }}"
+                                            <img src="/uploads/{{ $carType->image_path }}" alt="{{ $carType->name }}"
                                                 class="h-10 w-10 object-contain rounded bg-slate-50 border border-slate-200">
                                         @else
                                             <div
@@ -232,7 +231,7 @@
                                 @elseif ($existingImage)
                                     <div class="mt-3">
                                         <p class="text-xs text-slate-500 mb-1 font-medium">Current Image:</p>
-                                        <img src="{{ Storage::disk('public')->url($existingImage) }}"
+                                        <img src="/uploads/{{ $existingImage }}"
                                             class="h-16 w-16 object-contain border border-slate-200 rounded-lg p-1 bg-slate-50">
                                     </div>
                                 @endif

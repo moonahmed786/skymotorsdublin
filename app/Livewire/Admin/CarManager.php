@@ -13,11 +13,16 @@ class CarManager extends Component
     use WithPagination, WithSorting, WithFileUploads;
 
     public $search = '';
+    public $filterStatus = '';
+    public $filterMonth = '';
     public $excelFile; // For import
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CarExport, 'cars.xlsx');
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\CarExport(false, $this->filterStatus, $this->filterMonth),
+            'cars.xlsx'
+        );
     }
 
     public function downloadSample()
@@ -39,6 +44,22 @@ class CarManager extends Component
 
     public function updatingSearch()
     {
+        $this->resetPage();
+    }
+
+    public function updatingFilterStatus()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterMonth()
+    {
+        $this->resetPage();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'filterStatus', 'filterMonth']);
         $this->resetPage();
     }
 
@@ -84,6 +105,15 @@ class CarManager extends Component
                         $q->where('name', 'like', '%' . $this->search . '%');
                     });
             });
+
+        if ($this->filterStatus) {
+            $query->where('status', $this->filterStatus);
+        }
+
+        if ($this->filterStatus === 'sold' && $this->filterMonth) {
+            $query->whereMonth('sold_at', date('m', strtotime($this->filterMonth)))
+                ->whereYear('sold_at', date('Y', strtotime($this->filterMonth)));
+        }
 
         // Apply sorting
         if ($this->sortField === 'brand.name') {

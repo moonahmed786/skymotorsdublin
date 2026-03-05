@@ -6,7 +6,7 @@
                 <div class="p-6 bg-gray-100 dark:bg-gray-700">
                     @if($car->images->count() > 0)
                         <div class="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden ring-1 ring-black/5 shadow-2xl">
-                            <img src="{{ Storage::disk('public')->url($car->images->where('is_primary', true)->first()->image_path ?? $car->images->first()->image_path) }}"
+                            <img src="/uploads/{{ $car->images->where('is_primary', true)->first()->image_path ?? $car->images->first()->image_path }}"
                                 class="w-full h-full object-cover main-image" id="mainImage">
                         </div>
                     @else
@@ -18,11 +18,9 @@
                     @if($car->images->count() > 1)
                         <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mt-6">
                             @foreach($car->images as $image)
-                                <button
-                                    onclick="document.getElementById('mainImage').src='{{ Storage::disk('public')->url($image->image_path) }}'"
+                                <button onclick="document.getElementById('mainImage').src='/uploads/{{ $image->image_path }}'"
                                     class="aspect-w-1 aspect-h-1 rounded-xl overflow-hidden ring-2 ring-transparent hover:ring-blue-500 transition-all focus:outline-none bg-gray-100">
-                                    <img src="{{ Storage::disk('public')->url($image->image_path) }}"
-                                        class="w-full h-full object-cover">
+                                    <img src="/uploads/{{ $image->image_path }}" class="w-full h-full object-cover">
                                 </button>
                             @endforeach
                         </div>
@@ -34,8 +32,7 @@
                     <div class="mb-6">
                         <div class="flex items-center gap-2 mb-2">
                             @if($car->brand && $car->brand->logo_path)
-                                <img src="{{ Storage::disk('public')->url($car->brand->logo_path) }}"
-                                    class="h-8 w-8 object-contain">
+                                <img src="/uploads/{{ $car->brand->logo_path }}" class="h-8 w-8 object-contain">
                             @endif
                             <h2 class="text-sm font-semibold text-blue-600 uppercase tracking-wide">
                                 {{ $car->brand->name ?? $car->make->name ?? 'Unknown Make' }}

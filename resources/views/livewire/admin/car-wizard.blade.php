@@ -56,7 +56,7 @@
                                             class="cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all duration-200 hover:shadow-md
                                             {{ $brandId == $brand->id ? 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-500 ring-opacity-50' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50' }}">
                                             @if($brand->logo_path)
-                                                <img src="{{ Storage::disk('public')->url($brand->logo_path) }}" class="h-12 w-12 object-contain mb-3 drop-shadow-sm">
+                                                <img src="/uploads/{{ $brand->logo_path }}" class="h-12 w-12 object-contain mb-3 drop-shadow-sm">
                                             @else
                                                 <div class="h-12 w-12 bg-slate-200 rounded-full mb-3 flex items-center justify-center text-slate-400">
                                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -79,7 +79,7 @@
                                                     class="cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all duration-200 hover:shadow-md
                                                     {{ $carTypeId == $type->id ? 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-500 ring-opacity-50' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50' }}">
                                                     @if($type->image_path)
-                                                        <img src="{{ Storage::disk('public')->url($type->image_path) }}" class="h-12 w-auto object-contain mb-3 drop-shadow-sm">
+                                                        <img src="/uploads/{{ $type->image_path }}" class="h-12 w-auto object-contain mb-3 drop-shadow-sm">
                                                     @else
                                                         <div class="h-12 w-16 bg-slate-200 rounded mb-3 flex items-center justify-center text-slate-400">
                                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -442,7 +442,7 @@
                                             <div class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
                                                 @foreach($existingImages as $img)
                                                     <div class="relative group aspect-square rounded-xl overflow-hidden bg-slate-100 border border-slate-200 transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/50 hover:-translate-y-1">
-                                                        <img src="{{ Storage::disk('public')->url($img['image_path']) }}" class="w-full h-full object-cover grayscale-[0.2] transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110">
+                                                        <img src="/uploads/{{ $img['image_path'] }}" class="w-full h-full object-cover grayscale-[0.2] transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110">
                                                         <div class="absolute inset-0 bg-blue-600/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                                         
                                                         <button type="button" 

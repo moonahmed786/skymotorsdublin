@@ -11,10 +11,14 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class CarExport implements FromCollection, WithHeadings, WithMapping
 {
     protected $isSample;
+    protected $filterStatus;
+    protected $filterMonth;
 
-    public function __construct($isSample = false)
+    public function __construct($isSample = false, $filterStatus = null, $filterMonth = null)
     {
         $this->isSample = $isSample;
+        $this->filterStatus = $filterStatus;
+        $this->filterMonth = $filterMonth;
     }
 
     /**
@@ -52,7 +56,19 @@ class CarExport implements FromCollection, WithHeadings, WithMapping
                 ])
             ]);
         }
-        return Car::with(['brand', 'type'])->get();
+
+        $query = Car::with(['brand', 'type']);
+
+        if ($this->filterStatus) {
+            $query->where('status', $this->filterStatus);
+        }
+
+        if ($this->filterStatus === 'sold' && $this->filterMonth) {
+            $query->whereMonth('sold_at', date('m', strtotime($this->filterMonth)))
+                ->whereYear('sold_at', date('Y', strtotime($this->filterMonth)));
+        }
+
+        return $query->get();
     }
 
     public function headings(): array
